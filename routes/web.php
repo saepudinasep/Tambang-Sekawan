@@ -3,9 +3,9 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('auth.login');
 });
 
-Route::get('/pegawai', function () {
-    return view('home');
-});
+// Auth::routes();
+
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
