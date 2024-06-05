@@ -19,50 +19,62 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Auth::routes();
-// Admin
-Route::get('/admin/dahboard', [DashboardController::class, 'index']); // name('dashboard')
-Route::resource('/admin/data-approve', dataApproveController::class);
-Route::post('/admin/data-approve/selesai/{dataApprove}', [dataApproveController::class, 'selesai']); // name('data-approve.selesai')
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dahboard', [DashboardController::class, 'index']); // name('dashboard')
+    Route::resource('/data-approve', dataApproveController::class);
+    Route::post('/data-approve/selesai/{dataApprove}', [dataApproveController::class, 'selesai']); // name('data-approve.selesai')
+});
 
-// Kepala Kantor
-Route::get('/kepalaKantor/dashboard', [DashboardController::class, 'index']); // name('dashboard')
-Route::resource('/kepalaKantor/data-approve', DataControlDataApproveController::class);
-Route::post('/kepalaKantor/data-approve/approve/{data_approve}', [DataControlDataApproveController::class, 'approve']); // name('data-approve.approve')
-Route::post('/kepalaKantor/data-approve/reject/{data_approve}', [DataControlDataApproveController::class, 'reject']); // name('data-approve.reject')
+// Kepala Kantor Routes
+Route::prefix('kepalaKantor')->name('kepalaKantor')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']); // name('dashboard')
+    Route::resource('/data-approve', DataControlDataApproveController::class);
+    Route::post('/data-approve/approve/{data_approve}', [DataControlDataApproveController::class, 'approve']); // name('data-approve.approve')
+    Route::post('/data-approve/reject/{data_approve}', [DataControlDataApproveController::class, 'reject']); // name('data-approve.reject')
+});
 
-// Pool
-Route::get('/pool/dashboard', [DashboardController::class, 'index']); // name('dashboard')
-Route::resource('/pool/data-approve', PoolDataControlDataApproveController::class);
-Route::post('/pool/data-approve/approve/{data_approve}', [PoolDataControlDataApproveController::class, 'approve']); // name('data-approve.approve')
-Route::post('/pool/data-approve/reject/{data_approve}', [PoolDataControlDataApproveController::class, 'reject']); // name('data-approve.reject')
-Route::post('/pool/data-approve/isiBBM/{data_approve}', [PoolDataControlDataApproveController::class, 'isiBbm']); // name('data-approve.isiBbm')
-Route::post('/pool/data-approve/gantiService/{data_approve}', [PoolDataControlDataApproveController::class, 'gantiService']); // name('data-approve.gantiService')
+// Pool Route
+Route::prefix('pool')->name('pool')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']); // name('dashboard')
+    Route::resource('/data-approve', PoolDataControlDataApproveController::class);
+    Route::post('/data-approve/approve/{data_approve}', [PoolDataControlDataApproveController::class, 'approve']); // name('data-approve.approve')
+    Route::post('/data-approve/reject/{data_approve}', [PoolDataControlDataApproveController::class, 'reject']); // name('data-approve.reject')
+    Route::post('/data-approve/isiBBM/{data_approve}', [PoolDataControlDataApproveController::class, 'isiBbm']); // name('data-approve.isiBbm')
+    Route::post('/data-approve/gantiService/{data_approve}', [PoolDataControlDataApproveController::class, 'gantiService']); // name('data-approve.gantiService')
+});
 
 // Service
-Route::get('/service/dashboard', [DashboardController::class, 'index']); // name('dashboard')
-Route::resource('/service', ServiceDataControlDataApproveController::class);
-Route::post('/service/isiBBM/{service}', [ServiceDataControlDataApproveController::class, 'isiBbm']); // name('service.isiBbm')
-Route::post('/service/service/{service}', [ServiceDataControlDataApproveController::class, 'service']); // name('service.service')
+Route::prefix('asService')->name('asService')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']); // name('dashboard')
+    Route::resource('/service', ServiceDataControlDataApproveController::class);
+    Route::post('/isiBBM/{service}', [ServiceDataControlDataApproveController::class, 'isiBbm']); // name('service.isiBbm')
+    Route::post('/service/{service}', [ServiceDataControlDataApproveController::class, 'service']); // name('service.service')
+});
 
 // superAdmin
-Route::get('/superAdmin/dashboard', [DashboardController::class, 'index']); // name('dashboard')
-Route::resource('/superAdmin/users', userController::class);
-Route::resource('/superAdmin/pegawai', pegawaiController::class);
-Route::resource('/superAdmin/kendaraan', kendaraanController::class);
-Route::resource('/superAdmin/driver', driverController::class);
-Route::resource('/superAdmin/data-approve', SuperAdminDataControlDataApproveController::class);
-Route::get('/exports', [SuperAdminDataControlDataApproveController::class, 'export_excel']); // name('data-approve.export')
-Route::resource('/superAdmin/approveAsPool', approveAsPool::class);
-Route::post('/superAdmin/approveAsPool/approve/{approveAsPool}', [approveAsPool::class, 'approve']); // name('approveAsPool.approve')
-Route::post('/superAdmin/approveAsPool/reject/{approveAsPool}', [approveAsPool::class, 'reject']); // name('approveAsPool.reject')
-Route::post('/superAdmin/approveAsPool/isiBBM/{approveAsPool}', [approveAsPool::class, 'isiBbm']); // name('approveAsPool.isiBbm')
-Route::post('/superAdmin/approveAsPool/gantiService/{approveAsPool}', [approveAsPool::class, 'gantiService']); // name('approveAsPool.gantiService')
-Route::resource('/superAdmin/approveAsKepala', approveAsKepalaKantor::class);
-Route::post('/superAdmin/approveAsKepala/approve/{approveAsKepala}', [approveAsKepalaKantor::class, 'approve']); // name('approveAsKepala.approve')
-Route::post('/superAdmin/approveAsKepala/reject/{approveAsKepala}', [approveAsKepalaKantor::class, 'reject']); // name('approveAsKepala.reject')
-Route::resource('/superAdmin/approveAsService', approveAsService::class);
-Route::post('/superAdmin/approveAsService/isiBBM/{approveAsService}', [approveAsService::class, 'isiBbm']); // name('approveAsService.isiBbm')
-Route::post('/superAdmin/approveAsService/service/{approveAsService}', [approveAsService::class, 'service']); // name('approveAsService.service')
+Route::prefix('superAdmin')->name('superAdmin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']); // name('dashboard')
+    Route::resource('/users', userController::class);
+    Route::resource('/pegawai', pegawaiController::class);
+    Route::resource('/kendaraan', kendaraanController::class);
+    Route::resource('/driver', driverController::class);
+    Route::resource('/data-approve', SuperAdminDataControlDataApproveController::class);
+    Route::get('/exports', [SuperAdminDataControlDataApproveController::class, 'export_excel']); // name('data-approve.export')
+
+    Route::resource('/approveAsPool', approveAsPool::class);
+    Route::post('/approveAsPool/approve/{approveAsPool}', [approveAsPool::class, 'approve']); // name('approveAsPool.approve')
+    Route::post('/approveAsPool/reject/{approveAsPool}', [approveAsPool::class, 'reject']); // name('approveAsPool.reject')
+    Route::post('/approveAsPool/isiBBM/{approveAsPool}', [approveAsPool::class, 'isiBbm']); // name('approveAsPool.isiBbm')
+    Route::post('/approveAsPool/gantiService/{approveAsPool}', [approveAsPool::class, 'gantiService']); // name('approveAsPool.gantiService')
+
+    Route::resource('/approveAsKepala', approveAsKepalaKantor::class);
+    Route::post('/approveAsKepala/approve/{approveAsKepala}', [approveAsKepalaKantor::class, 'approve']); // name('approveAsKepala.approve')
+    Route::post('/approveAsKepala/reject/{approveAsKepala}', [approveAsKepalaKantor::class, 'reject']); // name('approveAsKepala.reject')
+
+    Route::resource('/approveAsService', approveAsService::class);
+    Route::post('/approveAsService/isiBBM/{approveAsService}', [approveAsService::class, 'isiBbm']); // name('approveAsService.isiBbm')
+    Route::post('/approveAsService/service/{approveAsService}', [approveAsService::class, 'service']); // name('approveAsService.service')
+});
 
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
